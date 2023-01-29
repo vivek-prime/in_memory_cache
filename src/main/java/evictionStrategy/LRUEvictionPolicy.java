@@ -1,6 +1,6 @@
 package evictionStrategy;
 
-import models.Value;
+import models.ValueField;
 
 import java.sql.Timestamp;
 import java.util.HashMap;
@@ -8,15 +8,17 @@ import java.util.Map;
 
 public class LRUEvictionPolicy implements EvictionPolicy {
     @Override
-    public void removeElement(HashMap<Integer, Value> cacheStorage) {
+    public void removeElement(HashMap<Integer, ValueField> cacheStorage) {
         Object deletedKey = null;
+        Object value = null;
         Timestamp earliest = null;
-        for (Map.Entry<Integer, Value> entry : cacheStorage.entrySet()) {
-            if (earliest == null || entry.getValue().getTimestamp().before(earliest)) {
+        for (Map.Entry<Integer, ValueField> entry : cacheStorage.entrySet()) {
+            if (earliest == null || entry.getValue().getCurrentTimestamp().before(earliest)) {
                 deletedKey = entry.getKey();
-                earliest = entry.getValue().getTimestamp();
+                value = entry.getValue().getValue();
+                earliest = entry.getValue().getCurrentTimestamp();
             }
         }
-        System.out.println("deletedKey - " + deletedKey);
+        System.out.println("deletedKey - " + deletedKey + " , value - " + value);
     }
 }

@@ -3,7 +3,7 @@ package service;
 import exception.CustomException;
 import lombok.Data;
 import models.Cache;
-import models.Value;
+import models.ValueField;
 
 import java.sql.Timestamp;
 import java.time.Instant;
@@ -26,13 +26,13 @@ public class CacheServiceImpl implements CacheService {
 
     @Override
     public void addElement(int key, String value) {
-        HashMap<Integer, Value> cacheStorage = cache.getStorage();
+        HashMap<Integer, ValueField> cacheStorage = cache.getStorage();
         if (cacheStorage.containsKey(key)) {
-            Value valueField = cacheStorage.get(key);
+            ValueField valueField = cacheStorage.get(key);
             valueField.setValue(value);
-            valueField.setTimestamp(Timestamp.from(Instant.now()));
+            valueField.setCurrentTimestamp(Timestamp.from(Instant.now()));
         } else
-            cacheStorage.put(key, new Value(value, Timestamp.from(Instant.now())));
+            cacheStorage.put(key, new ValueField(value, Timestamp.from(Instant.now()), Timestamp.from(Instant.now())));
         if (cacheStorage.size() == cache.getCapacity())
             removeElement();
     }
@@ -41,7 +41,7 @@ public class CacheServiceImpl implements CacheService {
     public String getElement(int key) throws CustomException {
         if (!cache.getStorage().containsKey(key))
             throw new CustomException("Given Key not present : " + key);
-        cache.getStorage().get(key).setTimestamp(Timestamp.from(Instant.now()));
+        cache.getStorage().get(key).setCurrentTimestamp(Timestamp.from(Instant.now()));
         return cache.getStorage().get(key).getValue();
     }
 

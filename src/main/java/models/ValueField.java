@@ -7,7 +7,8 @@ import java.sql.Timestamp;
 
 @Data
 @AllArgsConstructor
-public class Value {
+public class ValueField {
     String value;
-    Timestamp timestamp;
+    Timestamp currentTimestamp;
+    Timestamp entryTimestamp;
 }
