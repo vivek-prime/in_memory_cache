@@ -19,8 +19,12 @@ public class CacheServiceImpl implements CacheService {
     }
 
     public static CacheServiceImpl getInstance(Cache cache) {
-        if (cacheService == null)
-            cacheService = new CacheServiceImpl(cache);
+        if (cacheService == null) {
+            synchronized (CacheServiceImpl.class) {
+                if (cacheService == null)
+                    cacheService = new CacheServiceImpl(cache);
+            }
+        }
         return cacheService;
     }
 

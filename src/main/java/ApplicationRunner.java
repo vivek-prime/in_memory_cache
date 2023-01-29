@@ -1,4 +1,6 @@
-import evictionStrategy.FifoEvictionPolicy;
+import evictionStrategy.EvictionPolicy;
+import evictionStrategy.EvictionPolicyFactory;
+import evictionStrategy.EvictionPolicyType;
 import exception.CustomException;
 import models.Cache;
 import service.CacheService;
@@ -8,8 +10,10 @@ import java.util.HashMap;
 
 public class ApplicationRunner {
     public static void main(String[] args) throws CustomException {
-//        Cache cache = new Cache(new HashMap<>(), 3, new LRUEvictionPolicy());
-        Cache cache = new Cache(new HashMap<>(), 3, new FifoEvictionPolicy());
+        EvictionPolicy fifo = EvictionPolicyFactory.getEvictionPolicy(EvictionPolicyType.FIFO);
+        EvictionPolicy lru = EvictionPolicyFactory.getEvictionPolicy(EvictionPolicyType.LRU);
+
+        Cache cache = new Cache(new HashMap<>(), 3, fifo);
         CacheService cacheService = CacheServiceImpl.getInstance(cache);
 
         cacheService.addElement(1, "vivek");
